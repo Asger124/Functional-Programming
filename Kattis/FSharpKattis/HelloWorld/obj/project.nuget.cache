@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "v1B7I0MAaVI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\asger\\ITU\\8.semester\\Funktionel programmering\\Opgaver\\Functional-Programming\\Kattis\\FSharpKattis\\HelloWorld\\FSharpKattis.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\asger\\.nuget\\packages\\fsharp.core\\8.0.403\\fsharp.core.8.0.403.nupkg.sha512"
+  ],
+  "logs": []
+}
