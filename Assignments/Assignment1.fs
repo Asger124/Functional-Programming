@@ -17,13 +17,12 @@ module Assignment1
         | n -> n + sum(n-1);;
 
 
-    let dup s = printfn "%s" (s + " " + s);;
+    let dup (s:string) = s + s
 
-    let rec dupn s n =
+    let rec dupn (s:string) n =
         match n with
-        |0 -> ()
-        |_ -> printf "%s" (s + " ") 
-              dupn s (n-1)
+        |0 -> ""
+        |_ -> s + dupn s (n-1)
 
     let rec bin (n,k)  = 
         match (n,k) with 
@@ -31,21 +30,22 @@ module Assignment1
         |(n,k) when n = k -> 1
         |(n,k) -> bin(n-1,k-1) + bin(n-1,k)
 
-    //bin(4,2) = bin(3,1) + bin(3,2)
-    //            Compute bin(3,2):
-    //                 bin(3,2) = bin(2,1) + bin(2,2)
-    //                            bin(2,2) = 1
-    //                            bin(2,1) = bin(1,1) + bin(1,0) = 1 + 1 
+    (*
+    bin(4,2) = bin(3,1) + bin(3,2)
+               Compute bin(3,2):
+                     bin(3,2) = bin(2,1) + bin(2,2)
+                                bin(2,2) = 1
+                                bin(2,1) = bin(1,1) + bin(1,0) = 1 + 1 
 
-    //           Compute bin(3,1)
-    //            bin(3,1) = bin(2,0) + bin(2,1) = 1 + 2 
+               Compute bin(3,1)
+                bin(3,1) = bin(2,0) + bin(2,1) = 1 + 2 
 
-    //results:
-    // bin(3,1) = 3 
-    // +
-    // bin (3,2) = 3 
-    // =
-    // bin(4,2) = 6 
+    results:
+     bin(3,1) = 3 
+     +
+     bin (3,2) = 3 
+     =
+    bin(4,2) = 6 *)
 
     
     let readFromConsole () = System.Console.ReadLine().Trim()
