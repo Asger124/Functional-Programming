@@ -1,0 +1,8 @@
+#ignore visual studio files
+.vs/
+
+
+bin/
+obj/
+Debug/
+Release/

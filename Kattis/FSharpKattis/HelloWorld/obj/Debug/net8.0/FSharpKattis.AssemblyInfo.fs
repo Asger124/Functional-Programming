@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("FSharpKattis")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+641575128f02aa597e626d55cf0fef5b27887801")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54f8158706ea7798d1696ab15b57b7af04779ce5")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("FSharpKattis")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("FSharpKattis")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]
