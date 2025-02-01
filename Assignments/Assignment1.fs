@@ -51,11 +51,21 @@ module Assignment1
     let readFromConsole () = System.Console.ReadLine().Trim()
     let tryParseInt (str : string) = System.Int32.TryParse str
     
-    let readInt() = failwith "not implemented"
+    let rec readInt() = 
+            let input = readFromConsole()
+            let (bool,res) = tryParseInt input
+            if bool then  
+                 res 
+            else 
+                printfn "%s is not an integer" input
+                readInt ()
+        
+                    
+              
 
-    let timediff _ = failwith "not implemented"
+    let timediff (h1,m1) (h2,m2) = ((h2 - h1)*60) + ( m2 - m1)
 
-    let minutes _ = failwith "not implemented"
+    let minutes (h1,m1) = timediff (0,0) (h1,m1)
 
-    let curry _ = failwith "not implemented"
-    let uncurry _ = failwith "not implemented"
+    let curry f a b = f (a,b)
+    let uncurry f (a,b) =  f a b 
