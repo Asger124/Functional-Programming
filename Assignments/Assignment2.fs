@@ -14,18 +14,47 @@ module Assignment2
         |n when n <= 0 -> []
         |n -> n::downto3 (n-1)
 
-    let removeOddIdx _ = failwith "not implemented"
+    let rec removeOddIdx xs =
+        match xs with 
+        |[] -> []
+        |x::_::xs -> x:: removeOddIdx xs
+        |x::xs -> x::xs 
 
-    let combinePair _ = failwith "not implemented"
+                  
+    let rec combinePair xs = 
+        match xs with 
+        |[] -> []
+        |x::x1::xs -> (x,x1)::combinePair xs 
+        |x::xs -> []
+        
+
+    //Record type for complex:
+
+    //type complex = {a:float; b:float}
+
+    //let mkComplex (x:float) (y:float) : complex = (a=x,b=y)
+    
+    //let complexToPair (a:complex)  = (a.a,a.b)
 
 
-    type complex = unit // Fill in your type here
-    let mkComplex _ = failwith "not implemented"
-    let complexToPair _ = failwith "not implemented"
-    let (|+|) _ = failwith "not implemented"
-    let (|*|) _ = failwith "not implemented"
-    let (|-|) _ = failwith "not implemented"
-    let (|/|) _ = failwith "not implemented"
+    type complex =  (float*float);;
+
+    let mkComplex (a:float) (b:float) : complex = (a,b);;
+    
+
+    let complexToPair (a:complex) = (fst a,snd a);;
+
+
+
+    let (|+|) (a:complex) (b:complex) : complex = (fst a + fst b,snd a+snd b);;
+
+
+    let (|*|) (a:complex) (b:complex) : complex = (fst a * fst b) - (snd a * snd b), (snd a * fst b) + (fst a * snd b);;
+
+    let (|-|) (a:complex) (b:complex) : complex =  (fst a - fst b, snd a - snd b);; 
+
+    let (|/|) (a:complex) (b:complex) : complex = a |*| mkComplex  (fst b / ( fst b**2 + snd b**2.)) ((-snd b / (fst b**2 + snd b**2)));;
+
 
     let explode1 _ = failwith "not implemented"
 
