@@ -56,13 +56,48 @@ module Assignment2
     let (|/|) (a:complex) (b:complex) : complex = a |*| mkComplex  (fst b / ( fst b**2 + snd b**2.)) ((-snd b / (fst b**2 + snd b**2)));;
 
 
-    let explode1 _ = failwith "not implemented"
+    let explode1 (s:string)  = s.ToCharArray() |> List.ofArray
+    
+    let rec explode2 (s:string) = 
+        match s with 
+        | "" -> []
+        |s-> s.Chars(0)::explode2 (s.Remove(0,1));;
 
-    let rec explode2 _ = failwith "not implemented"
+    let rec implode (cs:char list) : string = 
+        match cs with 
+        |[] -> ""
+        |x::xs -> x.ToString() + implode xs 
 
-    let implode _ = failwith "not implemented"
-    let implodeRev _ = failwith "not implemented"
+    let rec implodeRev (cs:char list) = 
+        match cs with 
+        |[] -> ""
+        |x::xs -> implodeRev xs + x.ToString()
 
-    let toUpper _ = failwith "not implemented"
+        (*ImplodeRev H e l 
+        
+                implodeRev [e l] + H.tostring() =leh 
+                    ImplodeRev [l] + e.toString() = l e
+                        ImplodeRev [] + l.toString = l
+                            "" 
+                 *)
 
-    let ack _ = failwith "not implemented"
+    let rec Iterator xs = 
+        match xs with 
+        |[] -> []
+        |x::xs -> System.Char.ToUpper x :: Iterator xs;;
+
+    let toUpper s = s |> explode1 |> Iterator |> implode;;
+
+
+    (*
+    Easier,but maybe not allowed,version? :
+    
+    let stringToUpper (s:string) = s.ToUpper();;
+    *)
+
+    let rec ack (m,n) = 
+        match (m,n) with 
+        |(m,n) when m < 0 || n < 0 -> failwith "Function only works on non negative numbers"
+        |(0,n) -> n+1
+        |(m,0) -> ack (m-1,1)
+        |(m,n) -> ack(m-1,ack(m,n-1));;
