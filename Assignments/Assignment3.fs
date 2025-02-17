@@ -91,18 +91,48 @@ module Assignment3
     let rec sumPositive_2 lst = List.fold (fun acc elem -> if elem >=0 then acc + elem else acc ) 0 lst
         
     let rec sumPositive_3 lst = List.filter (fun x -> x>=0) lst |> List.fold (fun acc x -> acc+x) 0 
-        
-  
-    let add5mul3_3 _ = failwith "not implemented"
-    
+
+
+    (*
+    let add5 x = 5 + x;;
+    let mul3 x = x * 3;;
+    *) 
  
-    let rec mergeFuns _ = failwith "not implemented"
+    let add5mul3_3 f x = f x |> add5 |> mul3
+    
+    (*For every element in fs (which here is a function)
+      apply the function to some value, store result in the accumulator, and proceed to the next element,
+      where we apply the function residing at this index, to the accumulator. Rinse and repeat. The accummulator will store
+      newly composed functions at each step. At the end of the list the final function composed returns a result.
+      The function id is the initial value for the accummulator. Id takes a value and returns it.
+      *)
+    let mergeFuns fs = fs |> List.fold (fun acc f x -> f (acc x)) id  
         
     let rec facFuns _ = failwith "not implemented"
         
     let fac_2 _ = failwith "not implemented"
 
-    let removeOddIdx _= failwith "not implemented"
+    (*let rec removeOddIdx xs =
+        match xs with 
+        |[] -> []
+        |x::_::xs -> x:: removeOddIdx xs
+        |x::xs -> x::xs 
+        *)
+
+
+    (*RemoveOddId where anynomous function takes an tuple with the accummulator as a list,
+    and a counter, that keeps track of indexing. We pass on the final acc(list) acessed
+    through pipe operator, which selects the first element of the tuple. Then another pipe is used to reverse the list,
+    as the fold function will effectively reverse the list its given.*)
+
+    let removeOddIdx xs = 
+        List.fold (fun (acc,index) elem -> 
+                  if index%2=0 then 
+                    elem::acc,index+1 
+                  else 
+                    acc,index+1) 
+                  ([],0) xs 
+                  |> fst |> List.rev 
         
     
     let weird _ = failwith "not implemented"
