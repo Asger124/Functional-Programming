@@ -58,24 +58,39 @@ module Assignment3
         
     let double_2 lst = List.map (fun x -> x*2) lst 
     
-    let rec stringLength _ = failwith "not implemented"
+    let rec stringLength (xs:string list) =
+        match xs with 
+        |[] -> []
+        |x::xs -> x.Length::stringLength xs 
         
-    let stringLength_2 _ = failwith "not implemented"
+    let stringLength_2 lst = List.map (fun (x:string) -> x.Length) lst 
     
-    let rec keepEven _ = failwith "not implemented"
+    let rec keepEven xs =
+        match xs with 
+        |[] -> []
+        |x::xs when x%2=0 -> x::keepEven xs
+        |x::xs -> keepEven xs 
     
-    let keepEven_2 _ = failwith "not implemented"
+    let keepEven_2 lst = List.filter (fun x ->x%2=0) lst 
     
-    let rec keepLengthGT5 _ = failwith "not implemented"
+    let rec keepLengthGT5 (xs:string list) =
+        match xs with 
+        |[] -> []
+        |x::xs when x.Length > 5 -> x::keepLengthGT5 xs 
+        |x::xs -> keepLengthGT5 xs 
         
-    let keepLengthGT5_2 _ = failwith "not implemented"
+    let keepLengthGT5_2 lst = List.filter (fun (x:string) -> x.Length>5) lst
     
     
-    let rec sumPositive _ = failwith "not implemented"
+    let rec sumPositive xs =
+        match xs with 
+        |[] -> 0
+        |x::xs when x >=0 -> x + sumPositive xs 
+        |x::xs -> sumPositive xs 
         
-    let rec sumPositive_2 _ = failwith "not implemented"
+    let rec sumPositive_2 lst = List.fold (fun acc elem -> if elem >=0 then acc + elem else acc ) 0 lst
         
-    let rec sumPositive_3 _ = failwith "not implemented"
+    let rec sumPositive_3 lst = List.filter (fun x -> x>=0) lst |> List.fold (fun acc x -> acc+x) 0 
         
   
     let add5mul3_3 _ = failwith "not implemented"
