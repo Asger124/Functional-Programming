@@ -120,7 +120,7 @@ module Assignment3
         *)
 
 
-    (*RemoveOddId where anynomous function takes an tuple with the accummulator as a list,
+    (*RemoveOddId where anynomous function takes a tuple with the accummulator as a list,
     and a counter, that keeps track of indexing. We pass on the final acc(list) acessed
     through pipe operator, which selects the first element of the tuple. Then another pipe is used to reverse the list,
     as the fold function will effectively reverse the list its given.*)
