@@ -16,15 +16,34 @@ module Interpreter.State
     let reservedVariableName v = List.exists (fun x -> x=v) varList 
 
     
-    type state = unit // your type goes here
+    type state = 
+    |S of Map<string, int>
     
-    let mkState _ = failwith "not implemented"
+    
+    let mkState ()= S Map.empty 
+
+
     let random _ = failwith "not implemented"
     
-    let declare _ = failwith "not implemented"
+    let declare x st = 
+        match st with 
+        |S map when (not(Map.containsKey x map)) && (not(reservedVariableName x)) && validVariableName x -> 
+            let newmap = Map.add x 0 map 
+            Some(S newmap)
+            
+        |_ -> None 
+         
+    let getVar x st = 
+        match st with 
+        |S map -> Map.tryFind x map 
     
-    let getVar _ = failwith "not implemented"
-    let setVar _ = failwith "not implemented"
     
+    let setVar x v st =
+        match st with 
+        |S map when (Map.containsKey x map) -> let addv = Map.add x v map 
+                                               Some (S addv)
+        |_ -> None                              
+
+                  
     let push _ = failwith "not implemented"
     let pop _ = failwith "not implemented"     

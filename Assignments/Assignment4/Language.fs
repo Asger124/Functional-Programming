@@ -10,7 +10,8 @@ type error =
     // var of string Remove if you want to start without State.fs
 
 type aexpr =
-    | Num of int                           
+    | Num of int
+    | Var of string
     | Add of aexpr * aexpr
     | Mul of aexpr * aexpr
     | Div of aexpr * aexpr
