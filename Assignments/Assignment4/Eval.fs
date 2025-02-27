@@ -87,17 +87,24 @@ module Interpreter.Eval
         |Declare v -> declare v st  
         |Assign(v,a) -> let xval = arithEval a st
                         Option.bind(fun x -> setVar v x st) xval
+
         |Seq(s1,s2) -> let stmtval1 = stmntEval s1 st 
                        let stmntval2 = Option.bind(fun x -> stmntEval s2 x) stmtval1 
                        Option.bind(fun x -> Some(x))stmntval2 
 
-        
-        |_ -> None 
-
-        //|Assign(v,a) -> match(arithEval a st) with
-        //                |Some x -> match st with 
-        //                           |S map -> 
-                        
+        |If(guard,s1,s2) -> let booleval = boolEval guard st 
+                            let stmtval1 = stmntEval s1 st 
+                            let stmtval2 = stmntEval s2 st 
+                            Option.bind(fun x -> Option.bind(fun y -> if x=true then Some(y) 
+                                                                      else Option.bind (fun z -> Option.bind (fun g -> 
+                                                                      if z=false then Some(g) else None) stmtval2) booleval) stmtval1) booleval       
+        |While(guard,s') -> let booleval = boolEval guard st 
+                           
+                            let stmtval = stmntEval s' st 
+                            let stopt = stmntEval Skip st 
+                            Option.bind(fun x -> Option.bind(fun y -> if x=true then stmntEval s y  
+                                                                      else Option.bind(fun z -> Option.bind(fun g -> 
+                                                                      if z=false then Some(g) else None) stopt) booleval) stmtval) booleval 
                         
                          
                         
