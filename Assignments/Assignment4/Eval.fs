@@ -3,8 +3,6 @@ module Interpreter.Eval
     open Result
     open Language
     open State
-
-    let stmntEval _ = failwith "not implemented"
     
     //For arithEval I first used Option.Get to extract the integer values needed for the arithmetic operations,
     //for example match on Mod looked like this:
@@ -81,6 +79,28 @@ module Interpreter.Eval
                      Option.bind(fun x -> Option.bind(fun y -> Some(x&&y)) yval) xval
        |Not a -> let xval = boolEval a st 
                  Option.bind(fun x -> Some(not x)) xval
-                 
+
+    
+    let rec stmntEval s (st:state) = 
+        match s with 
+        |Skip -> Some st 
+        |Declare v -> declare v st  
+        |Assign(v,a) -> let xval = arithEval a st
+                        Option.bind(fun x -> setVar v x st) xval
+        |Seq(s1,s2) -> let stmtval1 = stmntEval s1 st 
+                       let stmntval2 = Option.bind(fun x -> stmntEval s2 x) stmtval1 
+                       Option.bind(fun x -> Some(x))stmntval2 
+
+        
+        |_ -> None 
+
+        //|Assign(v,a) -> match(arithEval a st) with
+        //                |Some x -> match st with 
+        //                           |S map -> 
+                        
+                        
+                         
+                        
+                        
                  
                  
