@@ -2,7 +2,7 @@ module Interpreter.Eval
 
     open Result
     open Language
-    open State
+    open Interpreter.State
     
     //For arithEval I first used Option.Get to extract the integer values needed for the arithmetic operations,
     //for example match on Mod looked like this:
@@ -16,61 +16,51 @@ module Interpreter.Eval
     // - as the pattern match effectively does that. Also i think Option.get can throw an exeption
     //breaking the proper handling of returning a None value, if no match is found, but i not entirely sure.
 
-    let rec arithEval a st  = 
-        match a with 
-        |Num x -> Some x
-        |Var v  -> match st with 
-                   |S map -> Map.tryFind v map 
-                    
-        |Add(b,c) -> match(arithEval b st, arithEval c st) with 
-                     |Some(x), Some(y) -> Some(x+y) 
-                     |_ -> None 
-
-        |Mul(b,c) -> match(arithEval b st, arithEval c st) with 
-                     |Some(x), Some(y) -> Some(x*y) 
-                     |_ -> None
-        
-        |Div(b,c) ->  match (arithEval b st, arithEval c st) with 
-                      |Some(x),Some (y) when y > 0  -> Some (x/y) 
-                      |_ -> None 
-
-        |Mod(b,c) ->  match(arithEval b st, arithEval c st) with 
-                      |Some(x),Some(y) when y > 0 -> Some(x%y) 
-                      |_ -> None 
-  
+    
 
     //Credit to the Livecoding sessions helping me realize how Option.bind can be chained together to handle more arguments.
+
+    
+   
   
-    let rec arithEval2 a st  = 
+    let rec arithEval a st = 
         match a with 
         |Num x -> Some x 
         |Var v -> getVar v st 
                   
-        |Add(b,c) -> let xval = arithEval2 b st
-                     let yval = arithEval2 c st
+        |Add(b,c) -> let xval = arithEval b st
+                     let yval = arithEval c st
                      Option.bind(fun x -> Option.bind (fun y -> Some(x+y)) yval) xval
 
-        |Mul(b,c) -> let xval = arithEval2 b st
-                     let yval = arithEval2 c st
+        |Mul(b,c) -> let xval = arithEval b st
+                     let yval = arithEval c st
                      Option.bind(fun x -> Option.bind (fun y -> Some(x*y)) yval) xval
 
-        |Div(b,c) -> let xval = arithEval2 b st
-                     let yval = arithEval2 c st
+        |Div(b,c) -> let xval = arithEval b st
+                     let yval = arithEval c st
                      Option.bind (fun x -> Option.bind(fun y -> if y > 0 then Some(x/y) else None) yval) xval
 
-        |Mod(b,c) -> let xval = arithEval2 b st
-                     let yval = arithEval2 c st
+        |Mod(b,c) -> let xval = arithEval b st
+                     let yval = arithEval c st
                      Option.bind(fun x -> Option.bind (fun y -> if y > 0 then Some(x%y) else None) yval) xval
+        //Some v if a is equal to MemRead e1, e1 evaluates to Some ptr and ptr points to v in the memory of the state.
+
+        |MemRead e1 ->  let xval = arithEval e1 st
+                        Option.bind(fun x -> getMem x st) xval
+
+
+
+                                  
       
     let rec boolEval b st =
        match b with 
        |TT -> Some true
-       |Eq(a,c) ->  let xval = arithEval2 a st
-                    let yval = arithEval2 c st
+       |Eq(a,c) ->  let xval = arithEval a st
+                    let yval = arithEval c st
                     Option.bind(fun x -> Option.bind(fun y -> Some(x=y)) yval) xval
         
-       |Lt(a,c) -> let xval = arithEval2 a st
-                   let yval = arithEval2 c st
+       |Lt(a,c) -> let xval = arithEval a st
+                   let yval = arithEval c st
                    Option.bind(fun x -> Option.bind(fun y -> Some(x>y)) xval) yval
                     
        |Conj(a,c) -> let xval = boolEval a st
@@ -104,6 +94,25 @@ module Interpreter.Eval
                             Option.bind(fun x -> Option.bind(fun y -> if x=true then stmntEval s y  
                                                                       else Option.bind(fun z -> Option.bind(fun g -> 
                                                                       if z=false then Some(g) else None) stopt) booleval) stmtval) booleval 
+        
+        |Alloc (x,e) ->   let sizeOP = arithEval e st
+                          Option.bind(fun size -> alloc x size st)sizeOP
+                        
+
+        |MemWrite(e1,e2) -> let ptr = arithEval e1 st 
+                            let V = arithEval e2 st
+                            Option.bind(fun ptr1 -> Option.bind(fun v1 -> setMem ptr1 v1 st) V) ptr
+
+        |Free(e1,e2) -> let ptr = arithEval e1 st 
+                        let size = arithEval e2 st 
+                        Option.bind(fun ptr1 -> Option.bind(fun size1 -> free ptr1 size1 st)size)ptr 
+
+                       
+                        
+                        
+                                                  
+
+  
                         
                          
                         
