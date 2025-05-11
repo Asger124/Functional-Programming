@@ -145,11 +145,10 @@
     let IfParse = pif .>> spaces1 >>. ParBParse .>> spaces1 .>>. BracketsParse .>> spaces1 .>> pelse .>> spaces1 .>>. BracketsParse |>> (fun ((b,st),st1) -> If(b,st,st1))
     let ItParse = pif .>> spaces1 >>. ParBParse .>> spaces1 .>>. BracketsParse |>> IT  
     let MemWriteParse = binop (pstring ":=") (squares A1) A1 |>> MemWrite
-    let WhileParse = pwhile >>. spaces1 >>. ParBParse .>> spaces1 .>>. BracketsParse |>> While 
+    let WhileParse = pwhile >>. spaces1 >>. ParBParse .>> spaces1 .>> pdo .>>. BracketsParse |>> While 
     let allocParse = palloc >*>. parenthesise (binop (pchar ',') pid A1) |>> Alloc 
     let freeParse = pfree >*>. parenthesise (binop (pchar ',') A1 A1) |>> Free  
-    let printParse = pprint >*>. parenthesise(parseString .>*>. many (unop (pchar ',') A1)) |>> (fun (s,list) -> Print(list,s))  
-    do s2ref:= choice [BracketsParse;IfParse;ItParse;WhileParse;MemWriteParse;allocParse;freeParse; printParse;AssignParse;DecParse]
+    do s2ref:= choice [BracketsParse;IfParse;ItParse;WhileParse;MemWriteParse;allocParse;freeParse;AssignParse;DecParse]
 
     
     let pprogram = pstmnt |>> (fun s -> (Map.empty : program), s)
